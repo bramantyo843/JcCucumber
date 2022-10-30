@@ -10,12 +10,17 @@ import org.example.driver.DriverSingleton;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
+import io.cucumber.java.*;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
+
+
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class Hooks {
@@ -30,6 +35,15 @@ public class Hooks {
         TestScenarios[] tests = TestScenarios.values();
         extentTest = reports.startTest(tests[Utils.testCount].getTestName());
         Utils.testCount++;
+    }
+
+    @AfterStep
+    public void getResultStatus(Scenario scenario) throws IOException {
+        if(scenario.isFailed()) {
+            String screenshotPath = Utils.getScreenshot(driver, scenario.getName().replace(" ", "_"));
+            extentTest.log(LogStatus.FAIL, scenario.getName()+"\n"
+                    +extentTest.addScreenCapture(screenshotPath));;
+        }
     }
 
     @After
