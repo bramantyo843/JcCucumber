@@ -1,7 +1,7 @@
 package org.example.driver.util;
 
 public enum TestScenarios {
-    T1("User invalid login"),
+    T1("User Register"),
     T2("User valid login"),
     T3("Dashboard user function");
 
